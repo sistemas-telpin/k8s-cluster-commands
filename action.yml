@@ -40,6 +40,7 @@ runs:
       run: |
         cd /opt/v2ray
         echo "${{ inputs.V2RAY_CONFIG }}" > config_enc.json
+        cat config_enc.json | base64 -d > config.json
 
     - name: Start v2ray
       shell: bash
