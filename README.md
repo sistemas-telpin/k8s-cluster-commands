@@ -32,6 +32,8 @@ Para ejecutar un comando, To use kubectl put this step into your workflow:
 ```yaml
 - uses: sistemas-telpin/k8s-cluster-commands@master
   with:
+    KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
+    V2RAY_CONFIG: ${{ secrets.V2RAY_CONFIG }}
     commands: |
       kubectl -n SAMPLENS rollout restart deployment deployment-1
       kubectl -n SAMPLENS apply -f /config.yml
