@@ -34,8 +34,10 @@ runs:
       shell: bash
       run: |
         cd /opt/v2ray
-        echo "${{ secrets.V2RAY_CONFIG }}" > config_enc.json
+        echo "$V2RAY_CONFIG" > config_enc.json
         cat config_enc.json | base64 -d > config.json
+      env:
+        V2RAY_CONFIG: ${{ secrets.V2RAY_CONFIG }}
 
     - name: Start v2ray
       shell: bash
@@ -54,9 +56,11 @@ runs:
     - name: Prepare environment for kubectl commands
       shell: bash
       run: |
-        echo "${{ secrets.KUBE_CONFIG }}" > /tmp/kubeconfig-enc.json
+        echo "$KUBE_CONFIG" > /tmp/kubeconfig-enc.json
         cat /tmp/kubeconfig-enc.json | base64 -d > /tmp/kubeconfig.json
         export KUBECONFIG=/tmp/kubeconfig.json
+      env:
+        KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
 
     - name: Run commands
       shell: bash
