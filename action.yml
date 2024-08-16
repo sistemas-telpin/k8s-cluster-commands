@@ -1,7 +1,4 @@
-# Para generar los secrets de github:
-# KUBE_CONFIG = base64 config.json | tr -d '\n' | tee
-# V2RAY_CONFIG = base64 cluster-credentials.yml | tr -d '\n' | tee
-name: Run kubectl in Telpin K8s cluster
+name: Run kubectl commandss in Telpin K8s cluster
 description: "GitHub Action for interacting with kubectl (k8s)"
 author: "Telpin Sistemas <jsat@telpin.com.ar>"
 
@@ -42,10 +39,7 @@ runs:
       shell: bash
       run: |
         cd /opt/v2ray
-        echo "$V2RAY_CONFIG" > config_enc.json
-        cat config_enc.json | base64 -d > config.json
-      env:
-        V2RAY_CONFIG: ${{ inputs.V2RAY_CONFIG }}
+        echo "${{ inputs.V2RAY_CONFIG }}" > config_enc.json
 
     - name: Start v2ray
       shell: bash
@@ -64,11 +58,9 @@ runs:
     - name: Prepare environment for kubectl commands
       shell: bash
       run: |
-        echo "$KUBE_CONFIG" > /tmp/kubeconfig-enc.json
+        echo "${{ inputs.KUBE_CONFIG }}" > /tmp/kubeconfig-enc.json
         cat /tmp/kubeconfig-enc.json | base64 -d > /tmp/kubeconfig.json
         export KUBECONFIG=/tmp/kubeconfig.json
-      env:
-        KUBE_CONFIG: ${{ inputs.KUBE_CONFIG }}
 
     - name: Run commands
       shell: bash
