@@ -56,13 +56,10 @@ runs:
         echo "https_proxy=${PROXY_URL}" >> $GITHUB_ENV
         echo "ftp_proxy=${PROXY_URL}" >> $GITHUB_ENV
 
-    - name: Prepare environment for kubectl commands
+    - name: Prepare environment and run kubectl commands
       shell: bash
       run: |
         echo "${{ inputs.KUBE_CONFIG }}" > /tmp/kubeconfig-enc.json
         cat /tmp/kubeconfig-enc.json | base64 -d > /tmp/kubeconfig.json
         export KUBECONFIG=/tmp/kubeconfig.json
-
-    - name: Run commands
-      shell: bash
-      run: ${{ inputs.commands }}
+        ${{ inputs.commands }}
