@@ -1,0 +1,56 @@
+# Para generar los secrets de github:
+# KUBE_CONFIG = base64 config.json | tr -d '\n' | tee
+# V2RAY_CONFIG = base64 cluster-credentials.yml | tr -d '\n' | tee
+name: Run kubectl in Telpin K8s cluster
+description: "GitHub Action for interacting with kubectl (k8s)"
+author: "Telpin Sistemas <jsat@telpin.com.ar>"
+
+inputs:
+  commands:
+    description: "Los comandos kubectl a ejecutar"
+    required: true
+    default: "kubectl get pods"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Download kubectl
+      run: |
+        curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl" && \
+        chmod +x kubectl && \
+        mv kubectl /usr/local/bin/
+
+    - name: Download v2ray
+      run: |
+        mkdir -p /opt/v2ray
+        cd /opt/v2ray
+        wget -q https://github.com/v2fly/v2ray-core/releases/download/v5.16.1/v2ray-linux-64.zip
+        unzip v2ray-linux-64.zip
+        chmod +x v2ray
+
+    - name: Write v2ray config file
+      run: |
+        cd /opt/v2ray
+        echo "${{ secrets.V2RAY_CONFIG }}" > config_enc.json
+        cat config_enc.json | base64 -d > config.json
+
+    - name: Start v2ray
+      run: /opt/v2ray/v2ray run &
+
+    - name: Configure proxy
+      run: |
+        PROXY_URL=http://127.0.0.1:8081
+
+        # Set proxy environment variables
+        echo "http_proxy=${PROXY_URL}" >> $GITHUB_ENV
+        echo "https_proxy=${PROXY_URL}" >> $GITHUB_ENV
+        echo "ftp_proxy=${PROXY_URL}" >> $GITHUB_ENV
+
+    - name: Prepare environment for kubectl commands
+      run: |
+        echo "${{ secrets.KUBE_CONFIG }}" > /tmp/kubeconfig-enc.json
+        cat /tmp/kubeconfig-enc.json | base64 -d > /tmp/kubeconfig.json
+        export KUBECONFIG=/tmp/kubeconfig.json
+
+    - name: Run commands
+      run: ${{ inputs.commands }}
