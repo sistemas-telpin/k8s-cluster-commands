@@ -1,6 +1,6 @@
 # k8s-cluster-commands
 
-[![Preview](https://serhiy.s3.eu-central-1.amazonaws.com/Github_repo/kubectl/logo.png)](https://cloud.google.com)
+[![Preview](https://telpin.com.ar/wp-content/uploads/2023/02/logo-telpin-180x66-1.png)](https://telpin.com.ar)
 
 Github Action para interactuar con un cluster de K8s provisto por Telpin. Prepara un entorno seguro para ejecutar comandos kubectl ([k8s](https://kubernetes.io)).
 
@@ -27,10 +27,10 @@ base64 config.json | tr -d '\n' | tee
 
 ## Forma de uso
 
-Para ejecutar un comando, To use kubectl put this step into your workflow:
+Para ejecutar comandos **kubectl** en un workflow:
 
 ```yaml
-- uses: sistemas-telpin/k8s-cluster-commands@master
+- uses: sistemas-telpin/k8s-cluster-commands@1.0.9
   with:
     KUBE_CONFIG: ${{ secrets.KUBE_CONFIG }}
     V2RAY_CONFIG: ${{ secrets.V2RAY_CONFIG }}
