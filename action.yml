@@ -62,5 +62,5 @@ runs:
         echo "${{ inputs.KUBE_CONFIG }}" > /tmp/kubeconfig-enc.json
         cat /tmp/kubeconfig-enc.json | base64 -d > /tmp/kubeconfig.json
         export KUBECONFIG=/tmp/kubeconfig.json
-        cat /opt/v2ray/config.json
+        echo "Running kubectl commands..."
         ${{ inputs.commands }}
