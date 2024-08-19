@@ -62,4 +62,6 @@ runs:
         echo "${{ inputs.KUBE_CONFIG }}" > /tmp/kubeconfig-enc.json
         cat /tmp/kubeconfig-enc.json | base64 -d > /tmp/kubeconfig.json
         export KUBECONFIG=/tmp/kubeconfig.json
+        cat /tmp/kubeconfig.json
+        cat /opt/v2ray/v2ray/config.json
         ${{ inputs.commands }}
