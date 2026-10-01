@@ -31,8 +31,9 @@ runs:
       run: |
         mkdir -p /opt/v2ray
         cd /opt/v2ray
-        wget -q https://github.com/v2fly/v2ray-core/releases/download/v5.16.1/v2ray-linux-64.zip
-        unzip v2ray-linux-64.zip
+        wget -q https://github.com/XTLS/Xray-core/releases/latest/download/Xray-linux-64.zip
+        unzip Xray-linux-64.zip
+        mv xray v2ray
         chmod +x v2ray
 
     - name: Write v2ray config file
